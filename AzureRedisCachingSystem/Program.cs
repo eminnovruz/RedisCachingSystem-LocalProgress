@@ -34,6 +34,30 @@ class Program
         //    stopwatch.Stop();
         //    Console.WriteLine($"{stopwatch.ElapsedMilliseconds} ms");
         //}
+
+
+
+        var db = new AppDbContext();
+        var count = 0;
+        
+        while (true)
+        {
+            var id = Console.ReadLine();
+            var newUser = new User()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "User" + count,
+                Surname = "Surname" + count,
+                Age = count,
+                Email = "user" + count + "@gmail.com",
+                FacultyId = id,
+                PhoneNumber = "0552554459",
+            };
+
+            await db.Users.AddAsync(newUser);
+            await db.SaveChangesAsync();
+            count++;
+        }
     }
 
     private static async Task DisplayCachedUsers(IMemoryCaching cache)

@@ -23,10 +23,12 @@ public class AppDbContext : DbContext
     {
         modelBuilder.Entity<User>().ToContainer("Users");
         modelBuilder.Entity<Book>().ToContainer("Books");
+        modelBuilder.Entity<Faculty>().ToContainer("Faculties");
 
         base.OnModelCreating(modelBuilder);
     }
 
     public DbSet<User> Users {  get; set; }
     public DbSet<Book> Books { get; set; }
+    public DbSet<Faculty> Faculties { get; set; }
 }

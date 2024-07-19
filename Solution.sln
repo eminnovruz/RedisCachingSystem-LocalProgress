@@ -5,6 +5,10 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureRedisCachingSystem", "AzureRedisCachingSystem\AzureRedisCachingSystem.csproj", "{87D3BCA0-1B74-4356-8B10-0F7961D19464}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FilterSearchCachingSystem", "FilterSearchCachingSystem", "{6DFE98DD-623C-4080-B366-29F739A3964F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsForm", "WindowsForm\WindowsForm.csproj", "{D35FB59E-510E-4E6F-9217-4F7DB8E444AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +19,16 @@ Global
 		{87D3BCA0-1B74-4356-8B10-0F7961D19464}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87D3BCA0-1B74-4356-8B10-0F7961D19464}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87D3BCA0-1B74-4356-8B10-0F7961D19464}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D35FB59E-510E-4E6F-9217-4F7DB8E444AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D35FB59E-510E-4E6F-9217-4F7DB8E444AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D35FB59E-510E-4E6F-9217-4F7DB8E444AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D35FB59E-510E-4E6F-9217-4F7DB8E444AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D35FB59E-510E-4E6F-9217-4F7DB8E444AF} = {6DFE98DD-623C-4080-B366-29F739A3964F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70A94604-683A-4F65-B13D-26B119F91CA8}
