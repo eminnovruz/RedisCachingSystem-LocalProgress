@@ -5,6 +5,7 @@ using AzureRedisCachingSystem.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -27,11 +28,11 @@ namespace WindowsForm
         {
             if (checkBox1.Checked)
             {
-                LoadUsersFromDatabase();
+                LoadUsers();
             }
         }
 
-        private void LoadUsersFromDatabase()
+        private void LoadUsers()
         {
             listBox1.Items.Clear();
             foreach (var user in _context.Users)
@@ -48,32 +49,38 @@ namespace WindowsForm
 
         private async void FetchFaculties()
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             if (await _cache.CheckIfExist("Faculties"))
             {
-                await LoadFacultiesFromCache();
+                await LoadFacultiesFromCache(stopwatch);
             }
             else
             {
-                await LoadFacultiesFromDatabase();
+                await LoadFacultiesFromDatabase(stopwatch);
             }
         }
 
-        private async Task LoadFacultiesFromCache()
+        private async Task LoadFacultiesFromCache(Stopwatch stopwatch)
         {
             var faculties = await _cache.GetCacheData<List<Faculty>>("Faculties");
             PopulateFacultyComboBox(faculties);
-            listBox2.Items.Add("Faculties Loaded from <Cache>");
+
+            stopwatch.Stop();
+            listBox2.Items.Add($"Faculties Loaded from <Cache> -- {stopwatch.ElapsedMilliseconds} ms");
         }
 
-        private async Task LoadFacultiesFromDatabase()
+        private async Task LoadFacultiesFromDatabase(Stopwatch stopwatch)
         {
             var faculties = await _context.Faculties.ToListAsync();
             PopulateFacultyComboBox(faculties);
 
             await _cache.SetCacheData("Faculties", faculties, DateTimeOffset.UtcNow.AddSeconds(200));
 
+            stopwatch.Stop();
             listBox2.Items.Add("Faculties cached...");
-            listBox2.Items.Add("Faculties Loaded from <DATABASE>");
+            listBox2.Items.Add($"Faculties Loaded from <DATABASE> -- {stopwatch.ElapsedMilliseconds} ms");
         }
 
         private void PopulateFacultyComboBox(IEnumerable<Faculty> faculties)
@@ -83,6 +90,11 @@ namespace WindowsForm
             {
                 comboBox2.Items.Add(faculty.Name);
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

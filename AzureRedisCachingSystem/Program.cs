@@ -1,89 +1,53 @@
 ﻿using AzureRedisCachingSystem.Data;
-using AzureRedisCachingSystem.Models;
+using AzureRedisCachingSystem.Models.Cache;
+using AzureRedisCachingSystem.Models.Cache.Abstract;
 using AzureRedisCachingSystem.Services;
-using AzureRedisCachingSystem.Services.Abstract;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
 
 class Program
 {
-   
-    private static readonly TimeSpan CacheExpiration = TimeSpan.FromSeconds(120);
-
     static async Task Main(string[] args)
     {
-        //string connectionString = DbService.GetConnectionString();
-        //IMemoryCaching cache = new RedisCachingService(connectionString);
-
-        //Stopwatch stopwatch = new Stopwatch();
-
-        //if (await cache.CheckIfExist("Users"))
-        //{
-        //    stopwatch.Start();
-        //    await DisplayCachedUsers(cache);
-        //    stopwatch.Stop();
-        //    Console.WriteLine($"{stopwatch.ElapsedMilliseconds} ms");
-        //}
-        //else
-        //{
-        //    stopwatch.Start();
-        //    await FetchAndCacheUsers(cache);
-        //    stopwatch.Stop();
-        //    Console.WriteLine($"{stopwatch.ElapsedMilliseconds} ms");
-        //}
-
-
-
-        var db = new AppDbContext();
-        var count = 0;
+        AppDbContext _dbContext = new AppDbContext();
+        string _conStr = DbService.GetConnectionString();
         
-        while (true)
+        List<BaseCacheObject> cacheObjects = new List<BaseCacheObject>()
         {
-            var id = Console.ReadLine();
-            var newUser = new User()
+            new CacheObject(new RedisCachingService(_conStr))
             {
-                Id = Guid.NewGuid().ToString(),
-                Name = "User" + count,
-                Surname = "Surname" + count,
-                Age = count,
-                Email = "user" + count + "@gmail.com",
-                FacultyId = id,
-                PhoneNumber = "0552554459",
-            };
+                CacheData = _dbContext.Users.ToList(),
+                ExpireDuration = DateTimeOffset.UtcNow.AddSeconds(300),
+            },
 
-            await db.Users.AddAsync(newUser);
-            await db.SaveChangesAsync();
-            count++;
-        }
-    }
+            new CacheObject(new RedisCachingService(_conStr))
+            {
+                CacheData = _dbContext.Books.ToList(),
+                ExpireDuration = DateTimeOffset.UtcNow.AddDays(3)
+            },
 
-    private static async Task DisplayCachedUsers(IMemoryCaching cache)
-    {
-        var users = await cache.GetCacheData<List<User>>("Users");
-        PrintUserList(users);
-        Console.WriteLine("Accessed from cache");
-    }
+            new SearchQueryCacheObject(new MongoCachingService(_conStr), new HashService(), "applicationda/userin/secdiyi/filterlerle/yaranan/query")
+            {
+                CacheData = _dbContext.Faculties.ToList(),
+                ExpireDuration = DateTimeOffset.UtcNow.AddDays(30),
+            }
+        };
 
-    private static async Task FetchAndCacheUsers(IMemoryCaching cache)
-    {
-        using (var dbContext = new AppDbContext())
+        //cacheObjects.MuqavileModulu
+        //cacheObjects.MuqavileModulu.SetKeyData(new FilterData(plantId,filterdata1,filterdata2)).SetData(data);
+        //cacheObjects.MuqavileModulu.GetData(new FilterData(plantId,filterdata1,filterdata2));
+        //
+        //
+        //a = new Measurement(cacheObjects.MuqavileModulu.GetData(new FilterData(plantId,filterdata1,filterdata2)));
+        //a.Invoke();
+        //a.value. a.Duration
+        //
+        //List<Car>
+        //Dataset
+        //List<Human>
+        //IValue<List<Human>>
+        //IValue
         {
-            var users = await dbContext.Users.ToListAsync();
-            var result = await cache.SetCacheData("Users", users, DateTimeOffset.UtcNow.Add(CacheExpiration));
-            Console.WriteLine("Cached: " + result);
-            PrintUserList(users);
-            Console.WriteLine("Accessed from database");
-        }
-    }
+            string unieuqName;
 
-    private static void PrintUserList(IEnumerable<User> users)
-    {
-        foreach (var user in users)
-        {
-            Console.WriteLine($"{user.Name} / {user.Surname}");
         }
     }
 }
