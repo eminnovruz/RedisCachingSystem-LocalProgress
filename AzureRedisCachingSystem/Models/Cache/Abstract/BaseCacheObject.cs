@@ -1,4 +1,5 @@
-﻿using AzureRedisCachingSystem.Services.Abstract;
+﻿using AzureRedisCachingSystem.Models.Misc;
+using AzureRedisCachingSystem.Services.Abstract;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
 {
     public abstract class BaseCacheObject
     {
-        public object CacheData { get; set; }
+        public KValue<object> Value { get; set; }
         public DateTimeOffset ExpireDuration { get; set; }
         public StringBuilder UniqueKey { get; private set; }
 
@@ -25,10 +26,9 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
         {
             if (_watch)
             {
-
             }
 
-            bool result = await _cacheService.SetCacheData(UniqueKey.ToString(), CacheData, ExpireDuration);
+            bool result = await _cacheService.SetCacheData(UniqueKey.ToString(), Value, ExpireDuration);
             return result;
         }
 
@@ -40,13 +40,14 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
 
         public BaseCacheObject SetValue(object value)
         {
-            CacheData = value;
+            Value = new KValue<object>(value);
             return this;
         }
 
-        public async Task<T> GetValueAsync<T>(string key = null)
+        public async Task<KValue<T>> GetValueAsync<T>(string key = null)
         {
-            T value = await _cacheService.GetCacheData<T>(key == null ? UniqueKey.ToString() : key);
+            key ??= UniqueKey.ToString();
+            KValue<T> value = await _cacheService.GetCacheData<KValue<T>>(key);
             return value;
         }
 

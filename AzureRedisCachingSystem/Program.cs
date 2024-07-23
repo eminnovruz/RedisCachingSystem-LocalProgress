@@ -1,8 +1,7 @@
 ﻿using AzureRedisCachingSystem.Data;
-using AzureRedisCachingSystem.Models.Cache;
-using AzureRedisCachingSystem.Models.Cache.Abstract;
-using AzureRedisCachingSystem.Repositories;
+using AzureRedisCachingSystem.Models.Misc;
 using AzureRedisCachingSystem.Repositories.Abstract;
+using AzureRedisCachingSystem.Repositories;
 using AzureRedisCachingSystem.Services;
 
 class Program
@@ -16,8 +15,6 @@ class Program
 
         var result = await _cacheObjectRepo.UserCacheObject.SetCacheDataAsync();
 
-        Console.WriteLine(result);
-
-        var obj = await _cacheObjectRepo.UserCacheObject.GetValueAsync<int>();
+        var obj = await _cacheObjectRepo.UserCacheObject.GetValueAsync<KValue<object>>();
     }
 }
