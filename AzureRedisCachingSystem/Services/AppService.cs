@@ -2,7 +2,7 @@
 
 namespace AzureRedisCachingSystem.Services;
 
-public static class DbService
+public static class AppService
 {
     public static string GetConnectionString()
     {
@@ -12,6 +12,11 @@ public static class DbService
             .Build();
 
         return configuration.GetConnectionString("Redis");
+    }
+
+    public static string ConfigureLogging()
+    {
+
     }
 
 }

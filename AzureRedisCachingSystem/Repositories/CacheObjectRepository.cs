@@ -1,28 +1,25 @@
-﻿using AzureRedisCachingSystem.Models.Cache.Abstract;
+﻿using AzureRedisCachingSystem.Models;
+using AzureRedisCachingSystem.Models.Cache;
+using AzureRedisCachingSystem.Models.Cache.Abstract;
 using AzureRedisCachingSystem.Models.Misc;
 using AzureRedisCachingSystem.Repositories.Abstract;
 using AzureRedisCachingSystem.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace AzureRedisCachingSystem.Repositories
 {
     public class CacheObjectRepository : ICacheObjectRepository
     {
-        private readonly BaseCacheObject _userCacheObject;
+      
+        // NEW VERSION
 
-        public CacheObjectRepository()
-        {
-            var redisService = new RedisCachingService(DbService.GetConnectionString());
+        public BaseCacheObject UserCacheObjectNewVersion { get; set; } = new CacheObject<User>(new RedisCachingService(AppService.GetConnectionString()))
+            .SetParams(new User("Emin", "Novruz", "novruzemin693@gmail.com", 16, "0552554459", "1"))
+            .SetValue(15)
+            .SetDurationWithMonths(1)
+            .ActivateTimer();
 
-            _userCacheObject = new CacheObject(redisService)
-                .SetKey("Book")
-                .SetValue(new KValue<string>("Elxan Elatli"))
-                .SetDurationWithSeconds(300);
-        }
-
-        public BaseCacheObject UserCacheObject
-        {
-            get => _userCacheObject;
-            set => throw new InvalidOperationException("UserCacheObject cannot be set directly.");
-        }
+        public BaseCacheObject BookCacheObjectNewVersion { get; set; } = new CacheObject<Book>(new RedisCachingService(AppService.GetConnectionString()))
+            .SetParams(new Book("Ekow", "Al oxuda qedew", "Emin Novruz", 16));
     }
 }

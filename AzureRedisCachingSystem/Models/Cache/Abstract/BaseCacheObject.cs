@@ -1,8 +1,8 @@
-﻿using AzureRedisCachingSystem.Models.Misc;
+﻿using AzureRedisCachingSystem.Action;
+using AzureRedisCachingSystem.Models.Misc;
 using AzureRedisCachingSystem.Services.Abstract;
 using System;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AzureRedisCachingSystem.Models.Cache.Abstract
 {
@@ -11,6 +11,8 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
         public KValue<object> Value { get; set; }
         public DateTimeOffset ExpireDuration { get; set; }
         public StringBuilder UniqueKey { get; private set; }
+
+        protected SetParams setCacheParams;
 
         private bool _watch;
         protected readonly IMemoryCaching _cacheService;
@@ -37,6 +39,9 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
             UniqueKey.Clear().Append(key);
             return this;
         }
+
+        
+
 
         public BaseCacheObject SetValue(object value)
         {
