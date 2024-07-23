@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 public class CacheObject : BaseCacheObject
 {
-    public CacheObject(IMemoryCaching _cacheService, string defaultKeyName = "default_key")
+    public CacheObject(IMemoryCaching _cacheService)
         :base(_cacheService)
     {
-
-        UniqueKey = new StringBuilder(defaultKeyName);
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace AzureRedisCachingSystem.Repositories.Abstract;
+﻿using AzureRedisCachingSystem.Models.Cache.Abstract;
+
+namespace AzureRedisCachingSystem.Repositories.Abstract;
 
 public interface ICacheObjectRepository
 {
-
+    BaseCacheObject UserCacheObject { get; set; }
 }

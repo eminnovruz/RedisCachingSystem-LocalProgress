@@ -8,16 +8,22 @@ public class SearchQueryCacheObject : BaseCacheObject
 {
     private readonly IHashService _hashService;
 
-    public SearchQueryCacheObject(IMemoryCaching cacheService, IHashService hashService, string query) 
+    public SearchQueryCacheObject(IMemoryCaching cacheService, IHashService hashService) 
         : base(cacheService)
     {
         _hashService = hashService ?? throw new ArgumentNullException(nameof(hashService));
-        
-        UniqueKey = new System.Text.StringBuilder(query);
     }
 
-    private string HashUniqueKey()
+    public BaseCacheObject SetKey(string _plantId, params string[] filters)
     {
-        return _hashService.HashString(UniqueKey.ToString());
+        UniqueKey.Append(_plantId);
+        
+        foreach (var item in filters)
+        {
+            UniqueKey.Append(item + "&*");
+        }
+
+        return this;
     }
+
 }
