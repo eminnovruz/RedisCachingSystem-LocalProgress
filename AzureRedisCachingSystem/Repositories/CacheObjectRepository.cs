@@ -3,9 +3,26 @@ using AzureRedisCachingSystem.Models.Misc;
 using AzureRedisCachingSystem.Repositories.Abstract;
 using AzureRedisCachingSystem.Services;
 
-namespace AzureRedisCachingSystem.Repositories;
-
-public class CacheObjectRepository : ICacheObjectRepository
+namespace AzureRedisCachingSystem.Repositories
 {
-    BaseCacheObject ICacheObjectRepository.UserCacheObject { get; set; } = new CacheObject(new RedisCachingService(DbService.GetConnectionString())).SetKey("Books").SetValue(new KValue<string>("25")).SetDurationWithSeconds(300);
+    public class CacheObjectRepository : ICacheObjectRepository
+    {
+        private readonly BaseCacheObject _userCacheObject;
+
+        public CacheObjectRepository()
+        {
+            var redisService = new RedisCachingService(DbService.GetConnectionString());
+
+            _userCacheObject = new CacheObject(redisService)
+                .SetKey("Book")
+                .SetValue(new KValue<string>("Elxan Elatli"))
+                .SetDurationWithSeconds(300);
+        }
+
+        public BaseCacheObject UserCacheObject
+        {
+            get => _userCacheObject;
+            set => throw new InvalidOperationException("UserCacheObject cannot be set directly.");
+        }
+    }
 }
