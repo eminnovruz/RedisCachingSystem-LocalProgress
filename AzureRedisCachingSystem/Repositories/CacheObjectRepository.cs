@@ -10,16 +10,8 @@ namespace AzureRedisCachingSystem.Repositories
 {
     public class CacheObjectRepository : ICacheObjectRepository
     {
-      
-        // NEW VERSION
+        public BaseCacheObject UserCacheObjectNewVersion { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public BaseCacheObject UserCacheObjectNewVersion { get; set; } = new CacheObject<User>(new RedisCachingService(AppService.GetConnectionString()))
-            .SetParams(new User("Emin", "Novruz", "novruzemin693@gmail.com", 16, "0552554459", "1"))
-            .SetValue(15)
-            .SetDurationWithMonths(1)
-            .ActivateTimer();
-
-        public BaseCacheObject BookCacheObjectNewVersion { get; set; } = new CacheObject<Book>(new RedisCachingService(AppService.GetConnectionString()))
-            .SetParams(new Book("Ekow", "Al oxuda qedew", "Emin Novruz", 16));
+        public BaseCacheObject UserCacheObject => throw new NotImplementedException();
     }
 }

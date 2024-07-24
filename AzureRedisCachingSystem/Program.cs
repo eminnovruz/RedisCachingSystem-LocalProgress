@@ -7,13 +7,12 @@ using Serilog;
 
 class Program
 {
-    static async Task Main(string[] args)
+    static void Main(string[] args)
     {
-
+        
         AppDbContext _dbContext = new AppDbContext();
         string _conStr = AppService.GetConnectionString();
 
         ICacheObjectRepository _cacheObjectRepo = new CacheObjectRepository();
-
     }
 }

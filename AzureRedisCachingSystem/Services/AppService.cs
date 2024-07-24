@@ -14,7 +14,7 @@ public static class AppService
         return configuration.GetConnectionString("Redis");
     }
 
-    public static string ConfigureLogging()
+    public static void ConfigureLogging()
     {
 
     }

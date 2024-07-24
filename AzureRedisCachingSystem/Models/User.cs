@@ -22,8 +22,3 @@ public class User : BaseEntity
     public string FacultyId { get; set; }
 }
 
-public class UserFilters
-{
-    public User user { get; set; }
-
-}
