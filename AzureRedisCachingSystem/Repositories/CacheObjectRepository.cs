@@ -10,8 +10,6 @@ namespace AzureRedisCachingSystem.Repositories
 {
     public class CacheObjectRepository : ICacheObjectRepository
     {
-        public BaseCacheObject UserCacheObjectNewVersion { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public BaseCacheObject UserCacheObject => throw new NotImplementedException();
+        public BaseCacheObject UserCacheObject { get; set; } 
     }
 }

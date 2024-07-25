@@ -43,5 +43,4 @@ public class RedisCachingService : IMemoryCaching
     {
         return await db.KeyExistsAsync(key);
     }
-
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace AzureRedisCachingSystem.Services;
 
@@ -16,7 +17,10 @@ public static class AppService
 
     public static void ConfigureLogging()
     {
-
+        Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .CreateLogger();
     }
 
 }
