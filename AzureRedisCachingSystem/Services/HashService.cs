@@ -5,8 +5,19 @@ using System.Text;
 
 namespace AzureRedisCachingSystem.Services
 {
+    /// <summary>
+    /// Provides hashing services for strings using MD5 algorithm.
+    /// </summary>
     public class HashService : IHashService
     {
+        /// <summary>
+        /// Computes the MD5 hash of the given input string and returns it as a hexadecimal string.
+        /// </summary>
+        /// <param name="input">The input string to hash.</param>
+        /// <returns>The hexadecimal representation of the MD5 hash.</returns>
+        /// <exception cref="ArgumentException">Thrown when the input string is null or empty.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when an error occurs during hashing.</exception>
+        /// <exception cref="ApplicationException">Thrown when an unexpected error occurs.</exception>
         public string HashString(string input)
         {
             if (string.IsNullOrEmpty(input))
@@ -31,6 +42,12 @@ namespace AzureRedisCachingSystem.Services
             }
         }
 
+        /// <summary>
+        /// Converts the given byte array to its hexadecimal string representation.
+        /// </summary>
+        /// <param name="bytes">The byte array to convert.</param>
+        /// <returns>The hexadecimal string representation of the byte array.</returns>
+        /// <exception cref="ApplicationException">Thrown when an error occurs during conversion.</exception>
         private string ConvertToHexString(byte[] bytes)
         {
             try

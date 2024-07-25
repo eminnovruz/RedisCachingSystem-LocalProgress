@@ -1,40 +1,58 @@
 ﻿using AzureRedisCachingSystem.Models.Cache.Abstract;
 using AzureRedisCachingSystem.Services.Abstract;
 using Serilog;
+using System;
+using System.Text;
 
-namespace AzureRedisCachingSystem.Models.Cache;
-
-public class CacheObject<T> : BaseCacheObject
+namespace AzureRedisCachingSystem.Models.Cache
 {
-    public CacheObject(IMemoryCaching cacheService, IHashService hashService) : base(cacheService, hashService)
+    /// <summary>
+    /// Represents a cache object with a generic type parameter.
+    /// </summary>
+    /// <typeparam name="T">The type of the parameter used to set cache object properties.</typeparam>
+    public class CacheObject<T> : BaseCacheObject
     {
-
-    }
-
-    public CacheObject<T> SetParams(T parameter)
-    {
-        if (parameter == null) throw new ArgumentNullException(nameof(parameter));
-
-        var properties = parameter.GetType().GetProperties();
-        foreach (var prop in properties)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheObject{T}"/> class.
+        /// </summary>
+        /// <param name="cacheService">The cache service.</param>
+        /// <param name="hashService">The hash service.</param>
+        public CacheObject(IMemoryCaching cacheService, IHashService hashService)
+            : base(cacheService, hashService)
         {
-            var value = prop.GetValue(parameter);
+        }
 
-            if (value is DateTime dateTimeValue)
+        /// <summary>
+        /// Sets parameters for the cache object using the specified parameter.
+        /// </summary>
+        /// <param name="parameter">The parameter object used to set cache object properties.</param>
+        /// <returns>The current instance of <see cref="CacheObject{T}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="parameter"/> is null.</exception>
+        public CacheObject<T> SetParams(T parameter)
+        {
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
+
+            var properties = parameter.GetType().GetProperties();
+            foreach (var prop in properties)
             {
-                value = dateTimeValue.ToString("M/d/yyyy");
+                var value = prop.GetValue(parameter);
+
+                if (value is DateTime dateTimeValue)
+                {
+                    value = dateTimeValue.ToString("M/d/yyyy");
+                }
+
+                UniqueKey.Append($"{prop.Name.ToLower()}:{value?.ToString().ToLower()}&*");
             }
 
-            UniqueKey.Append($"{prop.Name.ToLower()}:{value.ToString().ToLower()}&*");
+            if (_hashFlag)
+            {
+                UniqueKey = new StringBuilder(_hashService.HashString(UniqueKey.ToString()));
+            }
+
+            Log.Information("Params set to cache object");
+
+            return this;
         }
-
-        if (_hashFlag)
-        {
-            UniqueKey = new System.Text.StringBuilder(_hashService.HashString(UniqueKey.ToString()));
-        }
-
-        Log.Information("Params Set to cache object");
-
-        return this;
     }
 }
