@@ -30,5 +30,5 @@
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/yourusername/AzureRedisCachingSystem.git
+   git clone https://github.com/eminnovruz/AzureRedis-Cache.git
    cd AzureRedisCachingSystem
