@@ -33,7 +33,6 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
         public IMemoryCaching CacheService { get; }
 
         private bool _watch;
-        protected bool _hashFlag;
         protected readonly IMemoryCaching _cacheService;
         protected readonly IHashService _hashService;
 
@@ -50,7 +49,6 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
 
             UniqueKey = new StringBuilder();
             _watch = false;
-            _hashFlag = true; // default
         }
 
         /// <summary>
@@ -162,10 +160,6 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
         /// </summary>
         /// <param name="flag">True to enable hashing, false to disable.</param>
         /// <returns>The current instance of <see cref="BaseCacheObject"/>.</returns>
-        public BaseCacheObject HashBefore(bool flag = true)
-        {
-            _hashFlag = flag;
-            return this;
-        }
+        
     }
 }

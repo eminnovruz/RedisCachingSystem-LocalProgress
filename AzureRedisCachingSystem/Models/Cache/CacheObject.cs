@@ -39,16 +39,13 @@ namespace AzureRedisCachingSystem.Models.Cache
 
                 if (value is DateTime dateTimeValue)
                 {
-                    value = dateTimeValue.ToString("M/d/yyyy");
+                    value = dateTimeValue.ToString("dd.MM.yyyy");
                 }
 
                 UniqueKey.Append($"{prop.Name.ToLower()}:{value?.ToString().ToLower()}&*");
             }
 
-            if (_hashFlag)
-            {
-                UniqueKey = new StringBuilder(_hashService.HashString(UniqueKey.ToString()));
-            }
+            UniqueKey = new StringBuilder(_hashService.HashString(UniqueKey.ToString()));
 
             Log.Information("Params set to cache object");
 
