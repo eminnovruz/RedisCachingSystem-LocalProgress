@@ -33,6 +33,7 @@ namespace AzureRedisCachingSystem.Models.Cache
             if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             var properties = parameter.GetType().GetProperties();
+
             foreach (var prop in properties)
             {
                 var value = prop.GetValue(parameter);
@@ -46,6 +47,8 @@ namespace AzureRedisCachingSystem.Models.Cache
             }
 
             UniqueKey = new StringBuilder(_hashService.HashString(UniqueKey.ToString()));
+
+            UniqueKey = new StringBuilder(_cacheService.HandleKeyConflict(UniqueKey.ToString(), 0));
 
             Log.Information("Params set to cache object");
 

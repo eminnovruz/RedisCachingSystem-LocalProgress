@@ -6,5 +6,5 @@ public interface IMemoryCaching
     Task<object> RemoveData(string key);
     Task<bool> SetCacheData<T>(string key, T value, DateTimeOffset expireTime);
     Task<bool> CheckIfExist(string Key);
-    
+    string HandleKeyConflict(string key, int x);
 }

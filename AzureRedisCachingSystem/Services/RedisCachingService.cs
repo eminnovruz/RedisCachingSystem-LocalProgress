@@ -76,5 +76,25 @@ namespace AzureRedisCachingSystem.Services
         {
             return await _db.KeyExistsAsync(key);
         }
+
+        /// <summary>
+        /// Handling key conflict by appending number to last.
+        /// </summary>
+        /// <param name="key">The key can be conflicted</param>
+        /// <param name="x">Starter number</param>
+        public string HandleKeyConflict(string key, int x)
+        {
+            var server = _connection.GetServer(_connection.GetEndPoints()[0]);
+            var keys = new HashSet<string>(server.Keys().Select(k => (string)k));
+
+            if (keys.Contains(key))
+            {
+                key += x.ToString();
+                x++;  
+                return HandleKeyConflict(key, x); 
+            }
+
+            return key;
+        }
     }
 }

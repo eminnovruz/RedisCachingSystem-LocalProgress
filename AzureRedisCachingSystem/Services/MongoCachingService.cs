@@ -17,12 +17,22 @@ public class MongoCachingService : IMemoryCaching
         throw new NotImplementedException();
     }
 
+    public void HandleKeyConflict(string key, int x)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<object> RemoveData(string key)
     {
         throw new NotImplementedException();
     }
 
     public Task<bool> SetCacheData<T>(string key, T value, DateTimeOffset expireTime)
+    {
+        throw new NotImplementedException();
+    }
+
+    string IMemoryCaching.HandleKeyConflict(string key, int x)
     {
         throw new NotImplementedException();
     }
