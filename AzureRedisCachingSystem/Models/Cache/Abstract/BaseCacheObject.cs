@@ -1,4 +1,5 @@
-﻿using AzureRedisCachingSystem.Models.Misc;
+﻿using AzureRedisCachingSystem.CacheMonitoring.Stat;
+using AzureRedisCachingSystem.Models.Misc;
 using AzureRedisCachingSystem.Services.Abstract;
 using Serilog;
 using System;
@@ -31,6 +32,8 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
         /// The cache service used for caching operations.
         /// </summary>
         public IMemoryCaching CacheService { get; }
+
+        public CacheObjectMetrics Metrics { get; }
 
         private bool _watch;
         protected readonly IMemoryCaching _cacheService;

@@ -1,4 +1,4 @@
-﻿namespace AzureRedisCachingSystem.Models.Common;
+﻿namespace AzureRedisCachingSystem.Models.Commo;
 
 public class BaseEntity
 {

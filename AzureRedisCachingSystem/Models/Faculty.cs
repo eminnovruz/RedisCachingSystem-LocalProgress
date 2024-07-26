@@ -1,4 +1,4 @@
-﻿using AzureRedisCachingSystem.Models.Common;
+﻿using AzureRedisCachingSystem.Models.Commo;
 
 namespace AzureRedisCachingSystem.Models;
 
