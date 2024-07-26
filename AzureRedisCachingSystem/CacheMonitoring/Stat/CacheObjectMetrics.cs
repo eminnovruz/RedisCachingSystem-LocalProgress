@@ -4,14 +4,25 @@ namespace AzureRedisCachingSystem.CacheMonitoring.Stat;
 
 public class CacheObjectMetrics : INotifyPropertyChanged
 {
-    private bool _isUnusedCache;
+
+    public event PropertyChangedEventHandler PropertyChanged;
 
     public int CacheCount { get; set; }
     public int RequestCount { get; set; }
-    public List<int> ResponseFrequencies { get; set; }
+    public List<long> ResponseFrequencies { get; set; }
     public int LastResponseFrequency { get; set; }
+    public DateTime SetDate { get; set; }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    private bool _isUnusedCache;
+
+    public CacheObjectMetrics()
+    {
+        CacheCount = 1;
+        RequestCount = 0;
+        ResponseFrequencies = new List<long>();
+        LastResponseFrequency = 0;
+        SetDate = DateTime.Now;
+    }
 
     public bool IsUnusedCache
     {

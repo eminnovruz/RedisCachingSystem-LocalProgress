@@ -33,7 +33,7 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
         /// </summary>
         public IMemoryCaching CacheService { get; }
 
-        public CacheObjectMetrics Metrics { get; }
+        public CacheObjectMetrics Metrics { get; set; }
 
         private bool _watch;
         protected readonly IMemoryCaching _cacheService;
@@ -50,6 +50,7 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
             _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService));
             _hashService = hashService;
 
+
             UniqueKey = new StringBuilder();
             _watch = false;
         }
@@ -62,12 +63,16 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
         {
             long elapsedMilliseconds = 0;
 
+            Metrics = new CacheObjectMetrics();
+
             if (_watch)
             {
                 var stopwatch = System.Diagnostics.Stopwatch.StartNew();
                 bool result = await _cacheService.SetCacheData(UniqueKey.ToString(), Value, ExpireDuration);
                 stopwatch.Stop();
                 elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+
+                Metrics.ResponseFrequencies.Add(elapsedMilliseconds);
 
                 Log.Information($"Build Cache method result: {result} ({elapsedMilliseconds} ms)");
             }
@@ -76,6 +81,8 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
                 bool result = await _cacheService.SetCacheData(UniqueKey.ToString(), Value, ExpireDuration);
                 Log.Information($"Build Cache method result: {result}");
             }
+
+            Metrics.CacheCount++;
 
             return this;
         }
@@ -110,8 +117,14 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
         /// <returns>A task representing the asynchronous operation, with a <see cref="KValue{T}"/> result.</returns>
         public async Task<KValue<T>> GetValueAsync<T>(string key = null)
         {
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
             key ??= UniqueKey.ToString();
             KValue<T> value = await _cacheService.GetCacheData<KValue<T>>(key);
+            stopwatch.Stop();
+
+            Metrics.ResponseFrequencies.Add(stopwatch.ElapsedMilliseconds);
+
             return value;
         }
 
@@ -157,12 +170,5 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
             _watch = true;
             return this;
         }
-
-        /// <summary>
-        /// Sets the flag for hashing before caching.
-        /// </summary>
-        /// <param name="flag">True to enable hashing, false to disable.</param>
-        /// <returns>The current instance of <see cref="BaseCacheObject"/>.</returns>
-        
     }
 }

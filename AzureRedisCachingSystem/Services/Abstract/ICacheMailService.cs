@@ -2,8 +2,8 @@
 
 public interface ICacheMailService
 {
-    Task<bool> NotifyUnusedCache();
-    Task<bool> SendMetrics();
     Task<bool> NotifyNewCacheObject();
-    Task<bool> SendCustom();
+    Task<bool> NotifyUnusedCache();
+    Task<bool> SendCustom(string subject, string body);
+    Task<bool> SendMetrics(string metrics);
 }

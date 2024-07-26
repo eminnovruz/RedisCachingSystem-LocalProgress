@@ -1,10 +1,15 @@
-﻿using AzureRedisCachingSystem.Data;
+﻿using AzureRedisCachingSystem.Configurations;
+using AzureRedisCachingSystem.Data;
 using AzureRedisCachingSystem.Models.Cache;
 using AzureRedisCachingSystem.Models.ModelFilters;
 using AzureRedisCachingSystem.Repositories;
 using AzureRedisCachingSystem.Repositories.Abstract;
 using AzureRedisCachingSystem.Services;
 using AzureRedisCachingSystem.Services.Abstract;
+using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 class Program
 {
@@ -18,6 +23,7 @@ class Program
         IMemoryCaching _cache = new RedisCachingService(_conStr);
         IHashService _hash = new HashService();
 
+
         _repo.UserCacheObject = new CacheObject<UserModelFilter>(_cache, _hash)
             .SetParams(new UserModelFilter()
             {
@@ -28,7 +34,7 @@ class Program
                 FacultyId = "555",
                 Id = "shouldbesamefortesting",
                 PhoneNumber = "0552554459",
-                From = new DateTime(2022,01,01),
+                From = new DateTime(2022, 01, 01),
                 To = new DateTime(2024, 08, 01)
             })
             .ActivateTimer()
