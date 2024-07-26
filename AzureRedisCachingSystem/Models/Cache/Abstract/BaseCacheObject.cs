@@ -63,8 +63,6 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
         {
             long elapsedMilliseconds = 0;
 
-            Metrics = new CacheObjectMetrics();
-
             if (_watch)
             {
                 var stopwatch = System.Diagnostics.Stopwatch.StartNew();
@@ -72,7 +70,6 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
                 stopwatch.Stop();
                 elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
 
-                Metrics.ResponseFrequencies.Add(elapsedMilliseconds);
 
                 Log.Information($"Build Cache method result: {result} ({elapsedMilliseconds} ms)");
             }
@@ -82,7 +79,6 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
                 Log.Information($"Build Cache method result: {result}");
             }
 
-            Metrics.CacheCount++;
 
             return this;
         }
