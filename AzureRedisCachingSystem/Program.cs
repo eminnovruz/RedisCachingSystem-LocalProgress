@@ -1,15 +1,10 @@
-﻿using AzureRedisCachingSystem.Configurations;
-using AzureRedisCachingSystem.Data;
+﻿using AzureRedisCachingSystem.Data;
 using AzureRedisCachingSystem.Models.Cache;
 using AzureRedisCachingSystem.Models.ModelFilters;
 using AzureRedisCachingSystem.Repositories;
 using AzureRedisCachingSystem.Repositories.Abstract;
 using AzureRedisCachingSystem.Services;
 using AzureRedisCachingSystem.Services.Abstract;
-using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 class Program
 {
@@ -42,5 +37,13 @@ class Program
             .SetValue(_context.Users.ToList());
 
         await _repo.UserCacheObject.BuildCache();
+
+        // GET
+
+        for (int i = 0; i < 5; i++)
+        {
+            var result = await _repo.UserCacheObject.GetValueAsync<object>();
+        }
+
     }
 }

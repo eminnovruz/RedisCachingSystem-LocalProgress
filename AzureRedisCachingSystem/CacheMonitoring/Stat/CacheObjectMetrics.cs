@@ -1,54 +1,74 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace AzureRedisCachingSystem.CacheMonitoring.Stat;
-
-public class CacheObjectMetrics : INotifyPropertyChanged
+namespace AzureRedisCachingSystem.CacheMonitoring.Stat
 {
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    public int CacheCount { get; set; }
-    public int RequestCount { get; set; }
-    public List<long> ResponseFrequencies { get; set; }
-    public int LastResponseFrequency { get; set; }
-    public DateTime SetDate { get; set; }
-
-    private bool _isUnusedCache;
-
-    public CacheObjectMetrics()
+    public class CacheObjectMetrics : INotifyPropertyChanged
     {
-        CacheCount = 1;
-        RequestCount = 0;
-        ResponseFrequencies = new List<long>();
-        LastResponseFrequency = 0;
-        SetDate = DateTime.Now;
-    }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    public bool IsUnusedCache
-    {
-        get => _isUnusedCache;
+        public int RequestCount { get; set; }
+        public List<long> ResponseFrequencies { get; set; }
+        public int LastResponseFrequency { get; set; }
 
-        set 
+        private bool _isUnusedCache;
+
+        public CacheObjectMetrics()
         {
-            if(_isUnusedCache != value)
-            {
-                _isUnusedCache = value;
-                OnPropertyChanged(nameof(IsUnusedCache));
+            RequestCount = 0;
+            ResponseFrequencies = new List<long>();
+            LastResponseFrequency = 0;
+        }
 
-                if(_isUnusedCache)
+        public bool IsUnusedCache
+        {
+            get => _isUnusedCache;
+            set
+            {
+                if (_isUnusedCache != value)
                 {
-                    OnIsUnusedCacheChanged();
+                    _isUnusedCache = value;
+                    OnPropertyChanged(nameof(IsUnusedCache));
+
+                    if (_isUnusedCache)
+                    {
+                        OnIsUnusedCacheChanged();
+                    }
                 }
             }
         }
-    }
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
 
-    private void OnIsUnusedCacheChanged()
-    {
-        Console.WriteLine("IsUnusedCache changed to true");
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void OnIsUnusedCacheChanged()
+        {
+            Console.WriteLine("IsUnusedCache changed to true");
+        }
+
+        public void WriteToJson(string filePath)
+        {
+            try
+            {
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                };
+
+                string jsonString = JsonSerializer.Serialize(this, options);
+                File.WriteAllText(filePath, jsonString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while writing to JSON file: {ex.Message}");
+            }
+        }
     }
 }

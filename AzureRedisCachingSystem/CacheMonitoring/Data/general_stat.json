@@ -1,10 +1,12 @@
 {
-  "exclude": [
-    "**/bin",
-    "**/bower_components",
-    "**/jspm_packages",
-    "**/node_modules",
-    "**/obj",
-    "**/platforms"
-  ]
+  "RequestCount": 5,
+  "ResponseFrequencies": [
+    343,
+    341,
+    341,
+    345,
+    340
+  ],
+  "LastResponseFrequency": 0,
+  "IsUnusedCache": false
 }

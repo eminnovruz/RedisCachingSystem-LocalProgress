@@ -50,6 +50,7 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
             _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService));
             _hashService = hashService;
 
+            Metrics = new CacheObjectMetrics();
 
             UniqueKey = new StringBuilder();
             _watch = false;
@@ -70,7 +71,6 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
                 stopwatch.Stop();
                 elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
 
-
                 Log.Information($"Build Cache method result: {result} ({elapsedMilliseconds} ms)");
             }
             else
@@ -78,7 +78,6 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
                 bool result = await _cacheService.SetCacheData(UniqueKey.ToString(), Value, ExpireDuration);
                 Log.Information($"Build Cache method result: {result}");
             }
-
 
             return this;
         }
@@ -120,6 +119,9 @@ namespace AzureRedisCachingSystem.Models.Cache.Abstract
             stopwatch.Stop();
 
             Metrics.ResponseFrequencies.Add(stopwatch.ElapsedMilliseconds);
+            Metrics.RequestCount++;
+
+            Metrics.WriteToJson("C:\\Users\\novru\\Source\\Repos\\AzureRedis-Cache\\AzureRedisCachingSystem\\CacheMonitoring\\Data\\general_stat.json");
 
             return value;
         }
