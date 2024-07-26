@@ -1,11 +1,48 @@
 {
-  "RequestCount": 5,
+  "RequestCount": 1,
   "ResponseFrequencies": [
-    343,
-    341,
-    341,
-    345,
+    347
+  ],
+  "LastResponseFrequency": 0,
+  "IsUnusedCache": false
+} {
+  "RequestCount": 1,
+  "ResponseFrequencies": [
+    338
+  ],
+  "LastResponseFrequency": 0,
+  "IsUnusedCache": false
+} {
+  "RequestCount": 2,
+  "ResponseFrequencies": [
+    347,
     340
+  ],
+  "LastResponseFrequency": 0,
+  "IsUnusedCache": false
+} {
+  "RequestCount": 2,
+  "ResponseFrequencies": [
+    338,
+    337
+  ],
+  "LastResponseFrequency": 0,
+  "IsUnusedCache": false
+} {
+  "RequestCount": 3,
+  "ResponseFrequencies": [
+    347,
+    340,
+    336
+  ],
+  "LastResponseFrequency": 0,
+  "IsUnusedCache": false
+} {
+  "RequestCount": 3,
+  "ResponseFrequencies": [
+    338,
+    337,
+    336
   ],
   "LastResponseFrequency": 0,
   "IsUnusedCache": false

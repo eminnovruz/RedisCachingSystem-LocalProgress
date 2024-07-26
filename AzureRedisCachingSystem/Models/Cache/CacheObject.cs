@@ -54,13 +54,5 @@ namespace AzureRedisCachingSystem.Models.Cache
 
             return this;
         }
-
-        public CacheObject<T> GetCacheData()
-        {
-
-
-
-            return this;
-        }
     }
 }

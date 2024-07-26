@@ -1,4 +1,5 @@
 ﻿using AzureRedisCachingSystem.Data;
+using AzureRedisCachingSystem.Models;
 using AzureRedisCachingSystem.Models.Cache;
 using AzureRedisCachingSystem.Models.ModelFilters;
 using AzureRedisCachingSystem.Repositories;
@@ -18,7 +19,6 @@ class Program
         IMemoryCaching _cache = new RedisCachingService(_conStr);
         IHashService _hash = new HashService();
 
-
         _repo.UserCacheObject = new CacheObject<UserModelFilter>(_cache, _hash)
             .SetParams(new UserModelFilter()
             {
@@ -36,14 +36,27 @@ class Program
             .SetDurationWithMinutes(2)
             .SetValue(_context.Users.ToList());
 
+        _repo.BookCacheObject = new CacheObject<Book>(_cache, _hash)
+            .SetParams(new Book()
+            {
+                Title = "101 Nagil",
+                Description = "Kuleylenib",
+                Price = 16,
+                AuthorFullName = "Mirze",
+            })
+            .ActivateTimer()
+            .SetDurationWithMinutes(2)
+            .SetValue(_context.Users.ToList());
+
         await _repo.UserCacheObject.BuildCache();
+        await _repo.BookCacheObject.BuildCache();
 
         // GET
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 3; i++)
         {
-            var result = await _repo.UserCacheObject.GetValueAsync<object>();
+            await _repo.UserCacheObject.GetValueAsync<object>();
+            await _repo.BookCacheObject.GetValueAsync<object>();
         }
-
     }
 }
