@@ -40,9 +40,9 @@ class Program
             .SetParams(new Book()
             {
                 Title = "101 Nagil",
-                Description = "Kuleylenib",
+                Description = "Agayev",
                 Price = 16,
-                AuthorFullName = "Mirze",
+                AuthorFullName = "AgaDadas",
             })
             .ActivateTimer()
             .SetDurationWithMinutes(2)
