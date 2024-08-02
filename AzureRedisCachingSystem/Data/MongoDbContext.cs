@@ -17,5 +17,4 @@ public class MongoDbContext
 
         Log.Information("Database connected successfully");
     }
-
 }
