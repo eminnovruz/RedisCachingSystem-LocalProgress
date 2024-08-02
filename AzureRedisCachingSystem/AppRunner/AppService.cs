@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Serilog;
 
-namespace AzureRedisCachingSystem.Services
+namespace AzureRedisCachingSystem.AppRunner
 {
     /// <summary>
     /// Provides static methods for application configuration and logging setup.
@@ -28,7 +28,7 @@ namespace AzureRedisCachingSystem.Services
         public static void ConfigureLogging()
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
+                .MinimumLevel.Warning()
                 .WriteTo.Console()
                 .CreateLogger();
         }
