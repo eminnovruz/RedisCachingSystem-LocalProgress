@@ -1,1 +1,1 @@
-﻿
+﻿Console.WriteLine("salam");
