@@ -27,8 +27,6 @@ class Program
 
         IRedisService redis = host.Services.GetRequiredService<IRedisService>();
 
-        CustomValue myValue = new CustomValue(31, "salam");
-
-        await redis.SetData("1239012390123ttfsha256", myValue);
+        Console.WriteLine(await redis.GetData("1239012390123ttfsha256")); 
     }
 }

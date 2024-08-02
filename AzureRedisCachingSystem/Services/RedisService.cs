@@ -22,11 +22,18 @@ public class RedisService : IRedisService
         throw new NotImplementedException();
     }
 
-    public Task<CustomValue> GetData()
+    public async Task<StackExchange.Redis.RedisValue> GetData(string key)
     {
-        throw new NotImplementedException();
-    }
+        StackExchange.Redis.RedisValue value = await _database.StringGetAsync(key);
 
+        if(!value.HasValue)
+        {
+            throw new ApplicationException("Error occured!");
+        }
+
+        return value;
+    }
+    
     public async Task<bool> SetData(string key, CustomValue value)
     {
         bool setResult = await _database.StringSetAsync(key, value.ToString());
