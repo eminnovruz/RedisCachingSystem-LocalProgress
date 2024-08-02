@@ -1,4 +1,4 @@
-﻿namespace AzureRedisCachingSystem.Configurations;
+﻿namespace AzureRedisCachingSystem.Configurations.Redis;
 
 public class RedisConfig
 {
