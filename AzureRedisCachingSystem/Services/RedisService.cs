@@ -54,9 +54,4 @@ public class RedisService : IRedisService
 
         return await _database.StringSetAsync(key, valueJson);
     }
-
-    public Task<bool> SetParams(object value)
-    {
-        throw new NotImplementedException();
-    }
 }
