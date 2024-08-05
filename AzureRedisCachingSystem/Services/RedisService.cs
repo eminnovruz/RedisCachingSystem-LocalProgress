@@ -4,6 +4,7 @@ using RedisCachingSystem.LocalProgress.HelperServices.Abstract;
 using RedisCachingSystem.LocalProgress.RedisValue;
 using RedisCachingSystem.LocalProgress.Services.Abstract;
 using StackExchange.Redis;
+using System.Reflection;
 using System.Text.Json;
 
 namespace RedisCachingSystem.LocalProgress.Services;
@@ -38,23 +39,40 @@ public class RedisService : IRedisService
 
         string jsonStr = value.ToString();
 
-        CustomValue customValue = new CustomValue(
-            value: JsonSerializer.Deserialize<object>(jsonStr)
-            );
+        CustomValue customValue = new CustomValue()
+        {
+            Value = JsonSerializer.Deserialize<object>(jsonStr)
+        };
 
         return customValue;
     }
 
     public async Task<bool> SetData(string key, CustomValue value)
     {
-        var jsonStr = JsonSerializer.Serialize(value.Value);
+        if (value?.Value == null)
+        {
+            throw new ArgumentNullException(nameof(value), "Value cannot be null");
+        }
+
+        string serializedValue;
+
+        if (value.Value is IDictionary<string, object> dictionary)
+        {
+            serializedValue = string.Join("&*", dictionary.Select(kv => $"{kv.Key}:{kv.Value}")) + "&*";
+        }
+        else
+        {
+            var properties = value.Value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var propStrings = properties.Select(p => $"{p.Name}:{p.GetValue(value.Value)}");
+            serializedValue = string.Join("&*", propStrings) + "&*";
+        }
 
         if (key.Length > 32)
         {
             key = _hashService.HashString(key);
         }
 
-        var setResult = await _database.StringSetAsync(key, jsonStr);
+        var setResult = await _database.StringSetAsync(key, serializedValue);
 
         return setResult;
     }

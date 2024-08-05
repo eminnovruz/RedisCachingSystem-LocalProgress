@@ -2,7 +2,7 @@
 
 public class Contract
 {
-    public Guid ContractId { get; set; }
+    public string ContractId { get; set; }
     public string Title { get; set; }
     public string Counterparty { get; set; }
     public DateTime StartDate { get; set; }

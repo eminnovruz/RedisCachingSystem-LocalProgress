@@ -1,7 +1,9 @@
 ﻿using AzureRedisCachingSystem.Configurations.Redis;
+using AzureRedisCachingSystem.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RedisCachingSystem.LocalProgress.FilterModels;
 using RedisCachingSystem.LocalProgress.HelperServices;
 using RedisCachingSystem.LocalProgress.HelperServices.Abstract;
 using RedisCachingSystem.LocalProgress.RedisValue;
@@ -33,20 +35,23 @@ class Program
 
             IRedisService redis = host.Services.GetRequiredService<IRedisService>();
 
-            await redis.SetData("salamalekuma", new CustomValue(
-                new List<string>()
+            await redis.SetData("contractfilters", new CustomValue()
+            {
+                 Value = new ContractFilterModel()
                 {
-                    "aue",
-                    "aue",
-                    "aue",
-                    "aue",
-                    "aue",
-                    "aue",
-                    "aue",
-                    "aue",
-                    "aue",
+                    Contract = new Contract()
+                    {
+                        StartDate = DateTime.Now,
+                        Status = "onProgress",
+                        ContractId = Guid.NewGuid().ToString(),
+                        ContractValue = 4,
+                        Counterparty = "contractParty",
+                        EndDate = DateTime.Now,
+                        Notes = "no notes",
+                        Title = "Main Contract"
+                    }
                 }
-                ));
+            });
         }
         catch (Exception exception)
         {
