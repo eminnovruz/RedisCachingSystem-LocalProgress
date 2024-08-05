@@ -32,9 +32,9 @@ public class RedisService : IRedisService
     {
         StackExchange.Redis.RedisValue value = await _database.StringGetAsync(key);
 
-        if(!value.HasValue)
+        if (!value.HasValue)
         {
-            Console.WriteLine("There is no value realated with given key."); 
+            Console.WriteLine("There is no value realated with given key.");
         }
 
         string jsonStr = value.ToString();
@@ -47,34 +47,16 @@ public class RedisService : IRedisService
         return customValue;
     }
 
+
     public async Task<bool> SetData(string key, CustomValue value)
     {
-        if (value?.Value == null)
-        {
-            throw new ArgumentNullException(nameof(value), "Value cannot be null");
-        }
+        string valueJson = JsonSerializer.Serialize(value.Value);
 
-        string serializedValue;
-
-        if (value.Value is IDictionary<string, object> dictionary)
-        {
-            serializedValue = string.Join("&*", dictionary.Select(kv => $"{kv.Key}:{kv.Value}")) + "&*";
-        }
-        else
-        {
-            var properties = value.Value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            var propStrings = properties.Select(p => $"{p.Name}:{p.GetValue(value.Value)}");
-            serializedValue = string.Join("&*", propStrings) + "&*";
-        }
-
-        if (key.Length > 32)
-        {
-            key = _hashService.HashString(key);
-        }
-
-        var setResult = await _database.StringSetAsync(key, serializedValue);
-
-        return setResult;
+        return await _database.StringSetAsync(key, valueJson);
     }
 
+    public Task<bool> SetParams(object value)
+    {
+        throw new NotImplementedException();
+    }
 }
