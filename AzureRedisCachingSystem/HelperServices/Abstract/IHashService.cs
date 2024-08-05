@@ -2,5 +2,5 @@
 
 public interface IHashService
 {
-    Task<string> HashString(string input);
+    string HashString(string input);
 }

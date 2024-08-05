@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RedisCachingSystem.LocalProgress.HelperServices;
+using RedisCachingSystem.LocalProgress.HelperServices.Abstract;
 using RedisCachingSystem.LocalProgress.RedisValue;
 using RedisCachingSystem.LocalProgress.Services;
 using RedisCachingSystem.LocalProgress.Services.Abstract;
@@ -24,15 +26,27 @@ class Program
             {
                 services.Configure<RedisConfig>(context.Configuration.GetSection("Redis"));
 
-                services.AddSingleton<IRedisService, RedisService>();
+                services.AddScoped<IRedisService, RedisService>();
+                services.AddScoped<IHashService, HashService>();
             })
             .Build();
 
             IRedisService redis = host.Services.GetRequiredService<IRedisService>();
 
-            CustomValue customValue = await redis.GetData("salamlarolsun");
-
-            Console.WriteLine(customValue.Value);
+            await redis.SetData("salamalekuma", new CustomValue(
+                new List<string>()
+                {
+                    "aue",
+                    "aue",
+                    "aue",
+                    "aue",
+                    "aue",
+                    "aue",
+                    "aue",
+                    "aue",
+                    "aue",
+                }
+                ));
         }
         catch (Exception exception)
         {
