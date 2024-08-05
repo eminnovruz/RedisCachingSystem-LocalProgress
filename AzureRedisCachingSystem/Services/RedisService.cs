@@ -23,16 +23,22 @@ public class RedisService : IRedisService
         throw new NotImplementedException();
     }
 
-    public async Task<StackExchange.Redis.RedisValue> GetData(string key)
+    public async Task<CustomValue> GetData(string key)
     {
         StackExchange.Redis.RedisValue value = await _database.StringGetAsync(key);
 
         if(!value.HasValue)
         {
-            throw new ApplicationException("Error occured!");
+            Console.WriteLine("There is no value realated with given key."); 
         }
 
-        return value;
+        string jsonStr = value.ToString();
+
+        CustomValue customValue = new CustomValue(
+            value: JsonSerializer.Deserialize<object>(jsonStr)
+            );
+
+        return customValue;
     }
     
     public async Task<bool> SetData(string key, CustomValue value)
