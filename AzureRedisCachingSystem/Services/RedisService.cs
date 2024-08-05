@@ -1,5 +1,6 @@
 ﻿using AzureRedisCachingSystem.Configurations.Redis;
 using Microsoft.Extensions.Options;
+using RedisCachingSystem.LocalProgress.CustomExceptions;
 using RedisCachingSystem.LocalProgress.HelperServices.Abstract;
 using RedisCachingSystem.LocalProgress.RedisValue;
 using RedisCachingSystem.LocalProgress.Services.Abstract;
@@ -34,7 +35,7 @@ public class RedisService : IRedisService
 
         if (!value.HasValue)
         {
-            Console.WriteLine("There is no value realated with given key.");
+            throw new NoValueException();
         }
 
         string jsonStr = value.ToString();
@@ -51,7 +52,7 @@ public class RedisService : IRedisService
     {
         if(await CheckIfExist(key))
         {
-            throw new ApplicationException("Cache object with given key is already exist");
+            throw new KeyExistException();
         }
         
         string valueJson = JsonSerializer.Serialize(value.Value);
