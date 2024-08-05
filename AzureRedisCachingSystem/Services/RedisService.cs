@@ -49,6 +49,11 @@ public class RedisService : IRedisService
 
     public async Task<bool> SetData(string key, CustomValue value)
     {
+        if(await CheckIfExist(key))
+        {
+            throw new ApplicationException("Cache object with given key is already exist");
+        }
+        
         string valueJson = JsonSerializer.Serialize(value.Value);
 
         return await _database.StringSetAsync(key, valueJson);
