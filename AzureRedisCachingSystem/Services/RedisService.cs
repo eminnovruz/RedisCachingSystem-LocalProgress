@@ -23,9 +23,9 @@ public class RedisService : IRedisService
         _hashService = hashService;
     }
 
-    public Task<bool> CheckIfExist(string key)
+    public async Task<bool> CheckIfExist(string key)
     {
-        throw new NotImplementedException();
+        return await _database.KeyExistsAsync(key);
     }
 
     public async Task<CustomValue> GetData(string key)

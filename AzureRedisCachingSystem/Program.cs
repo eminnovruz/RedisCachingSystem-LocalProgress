@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RedisCachingSystem.LocalProgress.Cache;
 using RedisCachingSystem.LocalProgress.FilterModels;
 using RedisCachingSystem.LocalProgress.HelperServices;
 using RedisCachingSystem.LocalProgress.HelperServices.Abstract;
