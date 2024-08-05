@@ -47,11 +47,15 @@ public class RedisService : IRedisService
         return customValue;
     }
 
-
     public async Task<bool> SetData(string key, CustomValue value)
     {
         string valueJson = JsonSerializer.Serialize(value.Value);
 
         return await _database.StringSetAsync(key, valueJson);
+    }
+
+    public async Task<bool> SetExpire(string key, DateTime expireDate)
+    {
+        return await _database.KeyExpireAsync(key, expireDate);
     }
 }

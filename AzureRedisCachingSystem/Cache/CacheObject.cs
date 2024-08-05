@@ -54,8 +54,15 @@ public class CacheObject
 
     public CacheObject SetValue(CustomValue value)
     {
-        Value = value; 
-        
+        Value = value;
+
+        return this;
+    }
+
+    public async Task<CacheObject> SetExpireAsync(DateTime expire)
+    {
+        await _redisService.SetExpire(Key, expire);
+
         return this;
     }
 

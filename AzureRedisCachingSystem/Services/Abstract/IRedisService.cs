@@ -7,4 +7,5 @@ public interface IRedisService
     Task<bool> SetData(string key, CustomValue value);
     Task<CustomValue> GetData(string key);
     Task<bool> CheckIfExist(string key);
+    Task<bool> SetExpire(string key, DateTime expire);
 }
