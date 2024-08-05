@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using RedisCachingSystem.LocalProgress.RedisValue;
 using RedisCachingSystem.LocalProgress.Services.Abstract;
 using StackExchange.Redis;
+using System.Text.Json;
 
 namespace RedisCachingSystem.LocalProgress.Services;
 
@@ -36,7 +37,9 @@ public class RedisService : IRedisService
     
     public async Task<bool> SetData(string key, CustomValue value)
     {
-        bool setResult = await _database.StringSetAsync(key, value.ToString());
+        var jsonStr = JsonSerializer.Serialize(value.Value);
+        
+        bool setResult = await _database.StringSetAsync(key, jsonStr);
 
         return setResult;
     }

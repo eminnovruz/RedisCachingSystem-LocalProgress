@@ -5,6 +5,8 @@ using Microsoft.Extensions.Hosting;
 using RedisCachingSystem.LocalProgress.RedisValue;
 using RedisCachingSystem.LocalProgress.Services;
 using RedisCachingSystem.LocalProgress.Services.Abstract;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 namespace RedisCachingSystem.LocalProgress;
 
@@ -27,6 +29,17 @@ class Program
 
         IRedisService redis = host.Services.GetRequiredService<IRedisService>();
 
-        Console.WriteLine(await redis.GetData("1239012390123ttfsha256")); 
+        StackExchange.Redis.RedisValue redisValue = await redis.GetData("salamlarolsun");
+
+        if(redisValue.HasValue)
+        {
+            string jsonStr = redisValue.ToString();
+
+            CustomValue customValue = new CustomValue(
+                value: JsonSerializer.Deserialize<object>(jsonStr)
+                );
+
+            Console.WriteLine(customValue.Value);
+        }
     }
 }

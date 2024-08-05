@@ -3,16 +3,9 @@
 public class CustomValue
 {
     public object Value { get; set; }
-    public string SecretName { get; set; }
     
-    public CustomValue(object value, string secretName)
+    public CustomValue(object value)
     {
         Value = value;
-        SecretName = secretName;
-    }
-
-    public override string ToString()
-    {
-        return $"{SecretName}/{Value}";
     }
 }
