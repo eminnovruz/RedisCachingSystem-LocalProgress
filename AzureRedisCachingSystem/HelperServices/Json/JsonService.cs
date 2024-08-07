@@ -1,11 +1,12 @@
-﻿using AzureRedisCachingSystem.Cache.Entries;
+﻿using AzureRedisCachingSystem.Cache.CustomValues;
+using AzureRedisCachingSystem.Cache.Entries;
 using Newtonsoft.Json;
 
 namespace AzureRedisCachingSystem.HelperServices.Json;
 
 public static class JsonService
 {
-    public static string SerializeEntry(CacheEntry entry)
+    public static string SerializeValue(CacheValue entry)
     {
         string entryJsonString = JsonConvert.SerializeObject(entry);
 

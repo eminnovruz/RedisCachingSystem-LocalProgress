@@ -21,9 +21,7 @@ public class RedisService : IRedisService
     public async Task<bool> WriteToRedis(CacheEntry entry)
     {
         RedisKey key = entry.Key;
-        RedisValue value = JsonService.SerializeEntry(entry);
-
-
+        RedisValue value = JsonService.SerializeValue(entry.Value);
 
         bool setResult = await database.StringSetAsync(key, value);
 

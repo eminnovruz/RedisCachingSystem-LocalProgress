@@ -64,7 +64,7 @@ List<Book> books = new List<Book>()
 RedisWriter writerAdapter = new RedisWriter(host.Services.GetRequiredService<IRedisService>());
 
 CacheEntry entry = new CacheEntryConfigurer()
-    .SetValue(new CacheValue() { Value = 15 })
+    .SetValue(new CacheValue() { Value = books })
     .SetParams(new Book()
     {
         Id = Guid.NewGuid().ToString(),
@@ -72,7 +72,7 @@ CacheEntry entry = new CacheEntryConfigurer()
         PublishDate = DateTime.Now,
         Title = "Naqillar alemi",
     })
-    .SetExpire(DateTimeOffset.UtcNow.AddMinutes(2))
+    .SetExpire(DateTimeOffset.UtcNow.AddMonths(2))
     .BuildCacheEntry();
 
 await writerAdapter.WriteToCache(entry);
