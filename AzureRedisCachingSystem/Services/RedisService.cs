@@ -18,6 +18,9 @@ public class RedisService : IRedisService
         database = redis.GetDatabase();
     }
 
+    public async Task<RedisValue> ReadFromRedis(string key)
+        => await database.StringGetAsync(key);
+
     public async Task<bool> WriteToRedis(CacheEntry entry)
     {
         RedisKey key = entry.Key;

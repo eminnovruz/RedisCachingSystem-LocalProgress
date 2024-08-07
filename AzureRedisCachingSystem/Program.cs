@@ -61,18 +61,13 @@ List<Book> books = new List<Book>()
 
 /////////////////////////////////////// Application
 
-RedisWriter writerAdapter = new RedisWriter(host.Services.GetRequiredService<IRedisService>());
+try
+{
 
-CacheEntry entry = new CacheEntryConfigurer()
-    .SetValue(new CacheValue() { Value = books })
-    .SetParams(new Book()
-    {
-        Id = Guid.NewGuid().ToString(),
-        Price = 15,
-        PublishDate = DateTime.Now,
-        Title = "Naqillar alemi",
-    })
-    .SetExpire(DateTimeOffset.UtcNow.AddMonths(2))
-    .BuildCacheEntry();
+}
+catch (Exception exception)
+{
+    Console.WriteLine(exception.Message);
+}
 
-await writerAdapter.WriteToCache(entry);
+
