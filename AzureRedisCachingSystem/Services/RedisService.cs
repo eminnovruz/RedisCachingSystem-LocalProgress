@@ -21,11 +21,17 @@ public class RedisService : IRedisService
     public async Task<bool> WriteToRedis(CacheEntry entry)
     {
         RedisKey key = entry.Key;
-
         RedisValue value = JsonService.SerializeEntry(entry);
 
         bool setResult = await database.StringSetAsync(key, value);
 
+        if (setResult is true)
+        {
+            TimeSpan expiryTime = entry.Expire - DateTimeOffset.Now;
+            await database.KeyExpireAsync(key, expiryTime);
+        }
+
         return setResult;
     }
+
 }
