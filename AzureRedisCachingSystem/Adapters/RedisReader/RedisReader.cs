@@ -1,4 +1,5 @@
 ﻿using AzureRedisCachingSystem.Cache.CustomValues;
+using AzureRedisCachingSystem.HelperServices.UniqueKey;
 using AzureRedisCachingSystem.Services.Abstract;
 using Newtonsoft.Json;
 using StackExchange.Redis;
@@ -21,11 +22,20 @@ public class RedisReader
         if (!responseValue.HasValue)
             throw new Exception("Cannot find value related with given key");
 
-        var obj = JsonConvert.DeserializeObject(responseValue);
+        CacheValue cacheValue = JsonConvert.DeserializeObject<CacheValue>(responseValue);
 
-        if (obj is CacheValue)
-            throw new Exception("Error occured while casting type");
+        if (cacheValue == null)
+            throw new Exception("Error occurred while casting type");
 
-        return obj as CacheValue;
-    } 
+        return cacheValue;
+    }
+
+    public async Task<CacheValue> ReadFromCacheViaParametersAsync(object parameter)
+    {
+        string key = string.Empty;
+        
+        UniqueKeyService.GenerateUniqueKeyViaParams(ref key, parameter);
+
+        return await ReadFromCacheAsync(key);
+    }
 }

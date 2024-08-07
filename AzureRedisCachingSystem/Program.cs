@@ -1,4 +1,5 @@
-﻿using AzureRedisCachingSystem.Adapters.RedisWriter;
+﻿using AzureRedisCachingSystem.Adapters.RedisReader;
+using AzureRedisCachingSystem.Adapters.RedisWriter;
 using AzureRedisCachingSystem.ApplicationModels;
 using AzureRedisCachingSystem.Cache.CustomValues;
 using AzureRedisCachingSystem.Cache.Entries;
@@ -61,13 +62,36 @@ List<Book> books = new List<Book>()
 
 /////////////////////////////////////// Application
 
-try
-{
+//RedisWriter writerAdapter = new RedisWriter(host.Services.GetRequiredService<IRedisService>());
 
-}
-catch (Exception exception)
-{
-    Console.WriteLine(exception.Message);
-}
+//CacheValue bookCacheValue = new CacheValue()
+//{
+//    Value = 31697252,
+//};
+
+//CacheEntry bookCache = new CacheEntryConfigurer()
+//    .SetKey("Salamqaqa")
+//    .SetValue(bookCacheValue)
+//    .SetExpire(DateTimeOffset.UtcNow.AddSeconds(100))
+//    .BuildCacheEntry();
+
+//await writerAdapter.WriteToCache(bookCache);
+
+////////////////////////////////////// Read sample
+
+// cc8687825c8a2556c011e8f6a77f81a0 
+
+//try
+//{
+//    RedisReader reader = new RedisReader(host.Services.GetRequiredService<IRedisService>());
+
+//    CacheValue responseValue = await reader.ReadFromCacheAsync("Salamqaqa");
+
+//    Console.WriteLine(responseValue.Value);
+//}
+//catch (Exception exception)
+//{
+//    Console.WriteLine(exception.Message);
+//}
 
 
