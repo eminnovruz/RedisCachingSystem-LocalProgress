@@ -10,6 +10,6 @@ namespace AzureRedisCachingSystem.Repositories
 {
     public class CacheObjectRepository : ICacheObjectRepository
     {
-        public BaseCacheObject UserCacheObject { get; set; } 
+        public BaseCacheObject BookCacheObject { get; set; }
     }
 }

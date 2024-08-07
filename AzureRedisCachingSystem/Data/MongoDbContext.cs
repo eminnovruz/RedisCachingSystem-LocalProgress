@@ -1,4 +1,5 @@
 ﻿using AzureRedisCachingSystem.Configurations;
+using AzureRedisCachingSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -10,10 +11,12 @@ public class MongoDbContext
 {
     private readonly IMongoDatabase _database;
 
-    public MongoDbContext(IOptions<MongoDbConfiguration> options)
+    public MongoDbContext(string conStr, string dbname)
     {
-        MongoClient client = new MongoClient(options.Value.ConnectionString);
+        MongoClient client = new MongoClient(conStr);
 
-        _database = client.GetDatabase(options.Value.DatabaseName);
+        _database = client.GetDatabase(dbname);
     }
+
+    public IMongoCollection<Book> Books { get; set; }
 }

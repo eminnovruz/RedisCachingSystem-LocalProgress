@@ -1,17 +1,8 @@
-﻿using AzureRedisCachingSystem.Models.Common;
-
+﻿
 namespace AzureRedisCachingSystem.Models;
 
-public class Book : BaseEntity 
+public class Book 
 {
-    public Book(string title, string description, string authorFullName, int price)
-    {
-        Title = title;
-        Description = description;
-        AuthorFullName = authorFullName;
-        Price = price;
-    }
-
     public string Title { get; set; }
     public string Description { get; set; }
     public string AuthorFullName  { get; set; }
