@@ -4,7 +4,7 @@ namespace AzureRedisCachingSystem.HelperServices.UniqueKey;
 
 public static class UniqueKeyService
 {
-    public static void GenerateUniqueKeyViaParams(string key,object parameter)
+    public static void GenerateUniqueKeyViaParams(ref string key,object parameter)
     {
         PropertyInfo[] properties = parameter.GetType().GetProperties();
 

@@ -23,6 +23,8 @@ public class RedisService : IRedisService
         RedisKey key = entry.Key;
         RedisValue value = JsonService.SerializeEntry(entry);
 
+
+
         bool setResult = await database.StringSetAsync(key, value);
 
         if (setResult is true)

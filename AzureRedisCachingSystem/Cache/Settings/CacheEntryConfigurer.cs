@@ -1,5 +1,7 @@
 ﻿using AzureRedisCachingSystem.Cache.CustomValues;
 using AzureRedisCachingSystem.Cache.Entries;
+using AzureRedisCachingSystem.HelperServices.Hash;
+using AzureRedisCachingSystem.HelperServices.UniqueKey;
 
 namespace AzureRedisCachingSystem.Cache.Settings;
 
@@ -25,6 +27,13 @@ public class CacheEntryConfigurer
 
     public CacheEntryConfigurer SetParams(object filterParameter)
     {
+        if(key is not null)
+        {
+            throw new Exception("You cannot define params after setting key manually. Try removing key");
+        }
+        
+        UniqueKeyService.GenerateUniqueKeyViaParams(ref key , filterParameter);
+
         return this;
     }
 
@@ -41,6 +50,8 @@ public class CacheEntryConfigurer
         {
             throw new Exception("Once configure settings before build.");
         }
+
+        HashIfNeeded();
 
         CacheEntry cacheEntry = new CacheEntry()
         {
@@ -60,6 +71,14 @@ public class CacheEntryConfigurer
             return false;
 
         return true;
+    }
+
+    private void HashIfNeeded()
+    {
+        if (key.Length > 32)
+        {
+            HashService.HashString(ref key);
+        }
     }
     #endregion
 }

@@ -1,4 +1,5 @@
 ﻿using AzureRedisCachingSystem.Adapters.RedisWriter;
+using AzureRedisCachingSystem.ApplicationModels;
 using AzureRedisCachingSystem.Cache.CustomValues;
 using AzureRedisCachingSystem.Cache.Entries;
 using AzureRedisCachingSystem.Cache.Settings;
@@ -23,5 +24,55 @@ var host = Host.CreateDefaultBuilder(args)
 })
 .Build();
 
-//////////////////////////////////////// Application
+//////////////////////////////////////// Fake data
 
+List<Book> books = new List<Book>()
+{
+    new Book
+    {
+        Id = Guid.NewGuid().ToString(),
+        Price = 15,
+        PublishDate = DateTime.Now,
+        Title = "Nagil 101"
+    },
+    new Book
+    {
+        Id = Guid.NewGuid().ToString(),
+        Price = 15,
+        PublishDate = DateTime.Now,
+        Title = "Nagil 101"
+    },
+    new Book
+    {
+        Id = Guid.NewGuid().ToString(),
+        Price = 15,
+        PublishDate = DateTime.Now,
+        Title = "Nagil 101"
+    },
+    new Book
+    {
+        Id = Guid.NewGuid().ToString(),
+        Price = 15,
+        PublishDate = DateTime.Now,
+        Title = "Nagil 101"
+
+    },
+};
+
+/////////////////////////////////////// Application
+
+RedisWriter writerAdapter = new RedisWriter(host.Services.GetRequiredService<IRedisService>());
+
+CacheEntry entry = new CacheEntryConfigurer()
+    .SetValue(new CacheValue() { Value = 15 })
+    .SetParams(new Book()
+    {
+        Id = Guid.NewGuid().ToString(),
+        Price = 15,
+        PublishDate = DateTime.Now,
+        Title = "Naqillar alemi",
+    })
+    .SetExpire(DateTimeOffset.UtcNow.AddMinutes(2))
+    .BuildCacheEntry();
+
+await writerAdapter.WriteToCache(entry);
