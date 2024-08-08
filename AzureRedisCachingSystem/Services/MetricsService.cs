@@ -17,8 +17,14 @@ namespace AzureRedisCachingSystem.Services
             this.context = context;
         }
 
-        public async Task CraeteMetrics(CacheMetrics metrics)
-            => await context.Metrics.InsertOneAsync(metrics);
+        public async Task CreateMetrics(CacheMetrics metrics)
+        {
+            FilterDefinition<CacheMetrics> filter = Builders<CacheMetrics>.Filter.Eq(m => m.Key, metrics.Key);
+            CacheMetrics existingMetrics = await context.Metrics.Find(filter).FirstOrDefaultAsync();
+
+            if (existingMetrics == null)
+                await context.Metrics.InsertOneAsync(metrics);
+        }
 
         public async Task<bool> HandleCacheHit(string key)
         {

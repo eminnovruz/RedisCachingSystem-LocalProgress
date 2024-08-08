@@ -24,7 +24,7 @@ public class RedisWriter
 
         bool writeResult = await redisService.WriteToRedis(entry);
 
-        if(writeResult)
+        if (writeResult)
         {
             CacheMetrics metrics = new CacheMetrics()
             {
@@ -32,9 +32,10 @@ public class RedisWriter
                 CacheHits = 1,
                 CacheMisses = 0,
                 LastAccessed = DateTime.UtcNow,
+                Id = Guid.NewGuid().ToString()
             };
 
-            await metricsService.CraeteMetrics(metrics);
+            await metricsService.CreateMetrics(metrics);
         }
 
         return writeResult;
