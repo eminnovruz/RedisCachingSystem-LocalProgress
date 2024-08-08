@@ -18,7 +18,7 @@ public class RedisWriter
 
     public async Task<bool> WriteToCache(CacheEntry entry)
     {
-        await HandleKeyConflict(entry.Key);
+        entry.Key = await HandleKeyConflict(entry.Key);
 
         bool writeResult = await redisService.WriteToRedis(entry);
 
@@ -38,7 +38,7 @@ public class RedisWriter
         return writeResult;
     }
 
-    private async Task HandleKeyConflict(string key)
+    private async Task<string> HandleKeyConflict(string key)
     {
         string conflictBehaviour = ConfigurationManager.AppSettings["KeyConflictBehaviour"];
         int x = 0;
@@ -52,5 +52,7 @@ public class RedisWriter
 
         else
             throw new Exception("Unkown Conflict Behaviour error");
+
+        return key;
     }
 }
