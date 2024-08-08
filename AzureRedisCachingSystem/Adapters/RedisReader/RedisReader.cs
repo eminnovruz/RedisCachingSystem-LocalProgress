@@ -9,10 +9,12 @@ namespace AzureRedisCachingSystem.Adapters.RedisReader;
 public class RedisReader
 {
     private readonly IRedisService redisService;
+    private readonly IMetricsService metricsService;
 
-    public RedisReader(IRedisService redisService)
+    public RedisReader(IRedisService redisService, IMetricsService metricsService)
     {
         this.redisService = redisService;
+        this.metricsService = metricsService;
     }
 
     public async Task<CacheValue> ReadFromCacheAsync(string key)
@@ -20,12 +22,17 @@ public class RedisReader
         RedisValue responseValue = await redisService.ReadFromRedis(key);
 
         if (!responseValue.HasValue)
+        {
+            await metricsService.HandleCacheMiss(key);
             throw new Exception("Cannot find value related with given key");
+        }
 
         CacheValue cacheValue = JsonConvert.DeserializeObject<CacheValue>(responseValue);
 
         if (cacheValue == null)
             throw new Exception("Error occurred while casting type");
+
+        await metricsService.HandleCacheHit(key);
 
         return cacheValue;
     }

@@ -17,7 +17,7 @@ namespace AzureRedisCachingSystem.Services
             this.context = context;
         }
 
-        public async Task CreateMetrics(CacheMetrics metrics)
+        public async Task CraeteMetrics(CacheMetrics metrics)
             => await context.Metrics.InsertOneAsync(metrics);
 
         public async Task<bool> HandleCacheHit(string key)
@@ -31,7 +31,7 @@ namespace AzureRedisCachingSystem.Services
             return result.ModifiedCount > 0;
         }
 
-        public async Task<bool> HandleCacheMiss()
+        public async Task<bool> HandleCacheMiss(string key)
         {
             return true;
         }

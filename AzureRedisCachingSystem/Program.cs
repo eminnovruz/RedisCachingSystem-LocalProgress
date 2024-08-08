@@ -1,4 +1,9 @@
-﻿using AzureRedisCachingSystem.ApplicationModels;
+﻿using AzureRedisCachingSystem.Adapters.RedisReader;
+using AzureRedisCachingSystem.Adapters.RedisWriter;
+using AzureRedisCachingSystem.ApplicationModels;
+using AzureRedisCachingSystem.Cache.CustomValues;
+using AzureRedisCachingSystem.Cache.Entries;
+using AzureRedisCachingSystem.Cache.Settings;
 using AzureRedisCachingSystem.Configurations;
 using AzureRedisCachingSystem.Services;
 using AzureRedisCachingSystem.Services.Abstract;
@@ -17,6 +22,7 @@ var host = Host.CreateDefaultBuilder(args)
 {
     services.Configure<RedisConfig>(context.Configuration.GetSection("Redis"));
     services.AddScoped<IRedisService, RedisService>();
+    services.AddScoped<IMetricsService, MetricsService>();
 })
 .Build();
 
@@ -29,6 +35,7 @@ List<Book> books = new List<Book>()
         Id = Guid.NewGuid().ToString(),
         Price = 15,
         PublishDate = DateTime.Now,
+
         Title = "Nagil 101"
     },
     new Book
@@ -57,36 +64,36 @@ List<Book> books = new List<Book>()
 
 /////////////////////////////////////// Application
 
-//RedisWriter writerAdapter = new RedisWriter(host.Services.GetRequiredService<IRedisService>());
+RedisWriter writerAdapter = new RedisWriter(host.Services.GetRequiredService<IRedisService>(), host.Services.GetRequiredService<IMetricsService>());
 
-//CacheValue bookCacheValue = new CacheValue()
-//{
-//    Value = 31697252,
-//};
+CacheValue bookCacheValue = new CacheValue()
+{
+    Value = 31697252,
+};
 
-//CacheEntry bookCache = new CacheEntryConfigurer()
-//    .SetKey("Salamqaqa")
-//    .SetValue(bookCacheValue)
-//    .SetExpire(DateTimeOffset.UtcNow.AddSeconds(100))
-//    .BuildCacheEntry();
+CacheEntry bookCache = new CacheEntryConfigurer()
+    .SetKey("Salamqaqa")
+    .SetValue(bookCacheValue)
+    .SetExpire(DateTimeOffset.UtcNow.AddHours(1))
+    .BuildCacheEntry();
 
-//await writerAdapter.WriteToCache(bookCache);
+await writerAdapter.WriteToCache(bookCache);
 
 ////////////////////////////////////// Read sample
 
 // cc8687825c8a2556c011e8f6a77f81a0 
 
-//try
-//{
-//    RedisReader reader = new RedisReader(host.Services.GetRequiredService<IRedisService>());
+try
+{
+    RedisReader reader = new RedisReader(host.Services.GetRequiredService<IRedisService>(), host.Services.GetRequiredService<IMetricsService>());
 
-//    CacheValue responseValue = await reader.ReadFromCacheAsync("Salamqaqa");
+    CacheValue responseValue = await reader.ReadFromCacheAsync("Salamqaqa");
 
-//    Console.WriteLine(responseValue.Value);
-//}
-//catch (Exception exception)
-//{
-//    Console.WriteLine(exception.Message);
-//}
+    Console.WriteLine(responseValue.Value);
+}
+catch (Exception exception)
+{
+    Console.WriteLine(exception.Message);
+}
 
 
