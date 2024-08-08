@@ -11,12 +11,12 @@ public class MongoDbContext
 {
     private readonly IMongoDatabase _database;
 
-    public MongoDbContext(string conStr, string dbname)
+    public MongoDbContext(IOptions<MongoDbConfiguration> settings)
     {
-        MongoClient client = new MongoClient(conStr);
+        MongoClient client = new MongoClient(settings.Value.ConnectionString);
 
-        _database = client.GetDatabase(dbname);
+        _database = client.GetDatabase(settings.Value.DatabaseName);
     }
 
-    public IMongoCollection<CacheMetrics> Metrics { get; set; }
+    public IMongoCollection<CacheMetrics> Metrics => _database.GetCollection<CacheMetrics>("metrics");
 }

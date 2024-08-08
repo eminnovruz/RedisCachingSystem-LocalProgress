@@ -17,6 +17,8 @@ public class RedisWriter
 
     public async Task<bool> WriteToCache(CacheEntry entry)
     {
+        await HandleKeyConflict(entry.Key);
+
         bool writeResult = await redisService.WriteToRedis(entry);
 
         if(writeResult)
@@ -33,5 +35,11 @@ public class RedisWriter
         }
 
         return writeResult;
+    }
+
+    private async Task HandleKeyConflict(string key)
+    {
+        if(await redisService.CheckKeyExist(key))
+            throw new Exception("Value with given key is already existing..");
     }
 }

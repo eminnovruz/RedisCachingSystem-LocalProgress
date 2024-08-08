@@ -5,6 +5,7 @@ using AzureRedisCachingSystem.Cache.CustomValues;
 using AzureRedisCachingSystem.Cache.Entries;
 using AzureRedisCachingSystem.Cache.Settings;
 using AzureRedisCachingSystem.Configurations;
+using AzureRedisCachingSystem.Data;
 using AzureRedisCachingSystem.Services;
 using AzureRedisCachingSystem.Services.Abstract;
 using Microsoft.Extensions.Configuration;
@@ -21,8 +22,10 @@ var host = Host.CreateDefaultBuilder(args)
 .ConfigureServices((context, services) =>
 {
     services.Configure<RedisConfig>(context.Configuration.GetSection("Redis"));
+    services.Configure<MongoDbConfiguration>(context.Configuration.GetSection("MongoDB"));
     services.AddScoped<IRedisService, RedisService>();
     services.AddScoped<IMetricsService, MetricsService>();
+    services.AddSingleton<MongoDbContext>();
 })
 .Build();
 
@@ -64,7 +67,12 @@ List<Book> books = new List<Book>()
 
 /////////////////////////////////////// Application
 
-RedisWriter writerAdapter = new RedisWriter(host.Services.GetRequiredService<IRedisService>(), host.Services.GetRequiredService<IMetricsService>());
+IRedisService redisService = host.Services.GetRequiredService<IRedisService>();
+IMetricsService metricsService = host.Services.GetRequiredService<IMetricsService>();
+
+/////////////////////////////////////// Write sample
+
+RedisWriter writerAdapter = new RedisWriter(redisService, metricsService);
 
 CacheValue bookCacheValue = new CacheValue()
 {
@@ -79,13 +87,13 @@ CacheEntry bookCache = new CacheEntryConfigurer()
 
 await writerAdapter.WriteToCache(bookCache);
 
-////////////////////////////////////// Read sample
+/////////////////////////////////////// Read sample
 
 // cc8687825c8a2556c011e8f6a77f81a0 
 
 try
 {
-    RedisReader reader = new RedisReader(host.Services.GetRequiredService<IRedisService>(), host.Services.GetRequiredService<IMetricsService>());
+    RedisReader reader = new RedisReader(redisService,metricsService);
 
     CacheValue responseValue = await reader.ReadFromCacheAsync("Salamqaqa");
 

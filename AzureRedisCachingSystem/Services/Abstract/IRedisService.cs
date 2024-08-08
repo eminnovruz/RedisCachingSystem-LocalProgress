@@ -7,4 +7,5 @@ public interface IRedisService
 {
     Task<bool> WriteToRedis(CacheEntry entry);
     Task<RedisValue> ReadFromRedis(string key);
+    Task<bool> CheckKeyExist(string key);
 }

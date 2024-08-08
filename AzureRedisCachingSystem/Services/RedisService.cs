@@ -18,6 +18,9 @@ public class RedisService : IRedisService
         database = redis.GetDatabase();
     }
 
+    public async Task<bool> CheckKeyExist(string key)
+        => await database.KeyExistsAsync(key);
+
     public async Task<RedisValue> ReadFromRedis(string key)
         => await database.StringGetAsync(key);
 
