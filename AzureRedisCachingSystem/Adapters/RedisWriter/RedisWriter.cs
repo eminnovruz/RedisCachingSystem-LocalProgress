@@ -32,7 +32,7 @@ public class RedisWriter
                 CacheHits = 1,
                 CacheMisses = 0,
                 LastAccessed = DateTime.UtcNow,
-                Id = Guid.NewGuid().ToString()
+                Id = Generate24CharacterId()
             };
 
             await metricsService.CreateMetrics(metrics);
@@ -52,10 +52,24 @@ public class RedisWriter
         else if (conflictBehaviour == KeyConflictBehaviours.MakeChanges.ToString().ToLower())
             while (await redisService.CheckKeyExist(key))
                 key += x++.ToString();
-
         else
             throw new Exception("Unkown Conflict Behaviour error");
 
         return key;
     }
+
+
+    #region Helper Methods
+    private string Generate24CharacterId()
+    {
+        Guid guid = Guid.NewGuid();
+        string base64Guid = Convert.ToBase64String(guid.ToByteArray())
+                              .Replace("=", "")
+                              .Replace("+", "")
+                              .Replace("/", "")
+                              .Substring(0, 22); 
+
+        return base64Guid.PadRight(24, '0');
+    }
+    #endregion
 }
