@@ -31,7 +31,7 @@ public class RedisWriter
                 Key = entry.Key,
                 CacheHits = 1,
                 CacheMisses = 0,
-                LastAccessed = DateTime.UtcNow,
+                LastAccessed = DateTime.UtcNow.ToShortTimeString(),
             };
 
             await metricsService.CreateMetrics(metrics);

@@ -30,7 +30,7 @@ namespace AzureRedisCachingSystem.Services
         {
             var filter = Builders<CacheMetrics>.Filter.Eq(m => m.Key, key);
             var update = Builders<CacheMetrics>.Update.Inc(m => m.CacheHits, 1)
-                                                      .Set(m => m.LastAccessed, DateTime.UtcNow);
+                                                      .Set(m => m.LastAccessed, DateTime.UtcNow.ToShortTimeString());
 
             var result = await context.Metrics.UpdateOneAsync(filter, update);
 

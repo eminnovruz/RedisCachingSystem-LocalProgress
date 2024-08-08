@@ -13,7 +13,7 @@ public class CacheMetrics
     public string Key { get; set; }
     public int CacheHits { get;  set; }
     public int CacheMisses { get;  set; }
-    public DateTime LastAccessed { get;  set; }
+    public string LastAccessed { get;  set; }
 
     public CacheMetrics()
     {
@@ -21,7 +21,6 @@ public class CacheMetrics
         {
             cm.AutoMap();
             cm.SetIgnoreExtraElements(true);
-
         });
     }
 }
