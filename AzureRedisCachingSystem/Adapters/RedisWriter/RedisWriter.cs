@@ -32,7 +32,6 @@ public class RedisWriter
                 CacheHits = 1,
                 CacheMisses = 0,
                 LastAccessed = DateTime.UtcNow,
-                Id = Generate24CharacterId()
             };
 
             await metricsService.CreateMetrics(metrics);
@@ -57,19 +56,4 @@ public class RedisWriter
 
         return key;
     }
-
-
-    #region Helper Methods
-    private string Generate24CharacterId()
-    {
-        Guid guid = Guid.NewGuid();
-        string base64Guid = Convert.ToBase64String(guid.ToByteArray())
-                              .Replace("=", "")
-                              .Replace("+", "")
-                              .Replace("/", "")
-                              .Substring(0, 22); 
-
-        return base64Guid.PadRight(24, '0');
-    }
-    #endregion
 }
