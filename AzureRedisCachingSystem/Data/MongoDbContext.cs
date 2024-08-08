@@ -1,6 +1,5 @@
 ﻿using AzureRedisCachingSystem.Cache.Metrics;
 using AzureRedisCachingSystem.Configurations;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Serilog;

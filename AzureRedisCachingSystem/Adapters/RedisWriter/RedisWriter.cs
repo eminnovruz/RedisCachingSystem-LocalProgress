@@ -1,5 +1,6 @@
 ﻿using AzureRedisCachingSystem.Cache.Entries;
 using AzureRedisCachingSystem.Cache.Metrics;
+using AzureRedisCachingSystem.Cache.Models.Enums;
 using AzureRedisCachingSystem.Services.Abstract;
 using System.Configuration;
 
@@ -41,13 +42,13 @@ public class RedisWriter
 
     private async Task<string> HandleKeyConflict(string key)
     {
-        string conflictBehaviour = ConfigurationManager.AppSettings["KeyConflictBehaviour"];
+        string conflictBehaviour = ConfigurationManager.AppSettings["KeyConflictBehaviour"].ToLower();
         int x = 0;
 
-        if (conflictBehaviour == "none")
+        if (conflictBehaviour == KeyConflictBehaviours.None.ToString().ToLower())
             throw new Exception("Value realated with given key is already exists.. .Try providing another key.");
 
-        else if (conflictBehaviour == "makeChanges")
+        else if (conflictBehaviour == KeyConflictBehaviours.MakeChanges.ToString().ToLower())
             while (await redisService.CheckKeyExist(key))
                 key += x++.ToString();
 
