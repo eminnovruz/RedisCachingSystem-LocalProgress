@@ -18,7 +18,8 @@ public class RedisWriter
 
     public async Task<bool> WriteToCache(CacheEntry entry)
     {
-        entry.Key = await HandleKeyConflict(entry.Key);
+        if(await redisService.CheckKeyExist(entry.Key))
+            entry.Key = await HandleKeyConflict(entry.Key);
 
         bool writeResult = await redisService.WriteToRedis(entry);
 
