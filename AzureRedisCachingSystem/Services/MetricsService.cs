@@ -33,7 +33,11 @@ namespace AzureRedisCachingSystem.Services
 
         public async Task<bool> HandleCacheMiss(string key)
         {
-            return true;
+            var filter = Builders<CacheMetrics>.Filter.Eq(m => m.Key, key);
+           
+            DeleteResult result = await context.Metrics.DeleteOneAsync(filter);
+
+            return result.DeletedCount > 0;
         }
 
         public async Task<bool> RemoveMetrics()

@@ -72,36 +72,24 @@ IMetricsService metricsService = host.Services.GetRequiredService<IMetricsServic
 
 /////////////////////////////////////// Write sample
 
-RedisWriter writerAdapter = new RedisWriter(redisService, metricsService);
+//RedisWriter writerAdapter = new RedisWriter(redisService, metricsService);
 
-CacheValue bookCacheValue = new CacheValue()
-{
-    Value = 31697252,
-};
+//CacheValue bookCacheValue = new CacheValue() { Value = 31 };
 
-CacheEntry bookCache = new CacheEntryConfigurer()
-    .SetKey("Salamqaqa")
-    .SetValue(bookCacheValue)
-    .SetExpire(DateTimeOffset.UtcNow.AddHours(1))
-    .BuildCacheEntry();
+//CacheEntry bookCache = new CacheEntryConfigurer()
+//    .SetKey("Salamqaqa")
+//    .SetValue(bookCacheValue)
+//    .SetExpire(DateTimeOffset.UtcNow.AddHours(1))
+//    .BuildCacheEntry();
 
-await writerAdapter.WriteToCache(bookCache);
+//await writerAdapter.WriteToCache(bookCache);
 
 /////////////////////////////////////// Read sample
 
 // cc8687825c8a2556c011e8f6a77f81a0 
 
-try
-{
-    RedisReader reader = new RedisReader(redisService,metricsService);
+RedisReader reader = new RedisReader(redisService, metricsService);
 
-    CacheValue responseValue = await reader.ReadFromCacheAsync("Salamqaqa");
+CacheValue responseValue = await reader.ReadFromCacheAsync("Salamqaqa");
 
-    Console.WriteLine(responseValue.Value);
-}
-catch (Exception exception)
-{
-    Console.WriteLine(exception.Message);
-}
-
-
+Console.WriteLine(responseValue.Value);
