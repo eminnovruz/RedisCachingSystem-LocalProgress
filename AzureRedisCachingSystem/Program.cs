@@ -1,9 +1,4 @@
-﻿using AzureRedisCachingSystem.Adapters.RedisReader;
-using AzureRedisCachingSystem.Adapters.RedisWriter;
-using AzureRedisCachingSystem.ApplicationModels;
-using AzureRedisCachingSystem.Cache.CustomValues;
-using AzureRedisCachingSystem.Cache.Entries;
-using AzureRedisCachingSystem.Cache.Settings;
+﻿using AzureRedisCachingSystem.ApplicationModels;
 using AzureRedisCachingSystem.Configurations;
 using AzureRedisCachingSystem.Services;
 using AzureRedisCachingSystem.Services.Abstract;
