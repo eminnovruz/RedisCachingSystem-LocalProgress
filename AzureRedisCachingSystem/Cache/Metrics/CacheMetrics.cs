@@ -7,20 +7,25 @@ namespace AzureRedisCachingSystem.Cache.Metrics;
 public class CacheMetrics
 {
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)] 
+    [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
 
     public string Key { get; set; }
-    public int CacheHits { get;  set; }
-    public int CacheMisses { get;  set; }
-    public string LastAccessed { get;  set; }
+    public int CacheHits { get; set; }
+    public int CacheMisses { get; set; }
+    public string LastAccessed { get; set; }
 
-    public CacheMetrics()
+    static CacheMetrics()
     {
         BsonClassMap.RegisterClassMap<CacheMetrics>(cm =>
         {
             cm.AutoMap();
             cm.SetIgnoreExtraElements(true);
         });
+    }
+
+    public CacheMetrics()
+    {
+
     }
 }
